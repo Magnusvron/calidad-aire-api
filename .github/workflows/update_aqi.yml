@@ -1,12 +1,12 @@
-name: AQICN Auto Update
+name: update-database
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Ejecuta cada hora
-  workflow_dispatch:     # Te permite ejecutarlo manualmente
+    - cron: "0 * * * *"  # cada hora
+  workflow_dispatch:
 
 jobs:
-  update-database:
+  update:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,13 +20,13 @@ jobs:
 
       - name: Instalar dependencias
         run: |
-          pip install -r requirements.txt
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # <- esta línea es crucial
 
       - name: Ejecutar el cron job
-        run: |
-          python cron_job.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-          AQICN_TOKEN: ${{ secrets.AQICN_TOKEN }}
-          AQICN_STATION: "@469795"
+          STATION_ID: ${{ secrets.STATION_ID }}
+        run: python cron_job.py
+
