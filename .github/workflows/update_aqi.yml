@@ -1,12 +1,12 @@
-name: update-database
+name: Actualizar Base de Datos
 
 on:
-  workflow_dispatch:  # permite correrlo manualmente desde GitHub
   schedule:
-    - cron: '0 * * * *'  # cada hora (puedes cambiarlo)
+    - cron: '0 * * * *'  # cada hora
+  workflow_dispatch:     # permite correrlo manualmente desde GitHub
 
 jobs:
-  update:
+  update-db:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,26 +19,9 @@ jobs:
         python-version: '3.10'
 
     - name: Instalar dependencias
-      run: |
-        pip install -r requirements.txt
+      run: pip install -r requirements.txt
 
-    - name: Verificar si requests está instalado
-      run: pip show requests || echo "requests no instalado"
-      
-    - name: Verificar conectividad Supabase
-      run: |
-        echo "Probando DNS con ping:"
-        ping -c 3 ugszwjxitzbokzcnyhhe.supabase.co || echo "Ping fallido"
-    
-        echo "Probando CURL con endpoint válido:"
-        curl -i https://ugszwjxitzbokzcnyhhe.supabase.co/rest/v1/ || echo "Curl fallido"
-        
-        echo "Probando CURL :"
-        curl -i https://ugszwjxitbzokzcnyhhe.supabase.co || echo "Curl fallido"
-
-
-
-    - name: Ejecutar el cron job
+    - name: Ejecutar script de actualización
       env:
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
