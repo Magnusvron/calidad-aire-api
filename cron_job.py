@@ -1,10 +1,9 @@
 import requests
 import os
-from datetime import datetime, timezone, timedelta
+from datetime import datetime
 from supabase import create_client
 from dotenv import load_dotenv
 
-# Cargar variables de entorno
 load_dotenv()
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -14,41 +13,40 @@ STATION_ID = os.getenv("AQICN_STATION")  # ejemplo: A469795
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# Construir URL de API
 API_URL = f"https://api.waqi.info/feed/{STATION_ID}/?token={AQICN_TOKEN}"
 
-# Obtener datos
 response = requests.get(API_URL)
 data = response.json()
 
 if data["status"] == "ok":
     registros = []
 
-    # Extraer y redondear hora
-    fecha_original = data["data"]["time"]["iso"]
-    dt = datetime.fromisoformat(fecha_original.replace("Z", "+00:00")).astimezone(timezone.utc)
-    dt_redondeada = dt.replace(minute=0, second=0, microsecond=0)  # Redondear hacia abajo a hora cerrada
+    # Redondear la hora hacia abajo a la hora cerrada
+    fecha_original = datetime.fromisoformat(data["data"]["time"]["iso"].replace("Z", "+00:00"))
+    fecha_hora = fecha_original.replace(minute=0, second=0, microsecond=0).isoformat()
 
-    # Verificar si corresponde a hoy o futuro
-    if dt_redondeada.date() < datetime.now(timezone.utc).date():
-        print("Dato muy antiguo, ignorado:", dt_redondeada.isoformat())
-    else:
-        iaqi = data["data"]["iaqi"]
+    iaqi = data["data"]["iaqi"]
+    for variable, valor in iaqi.items():
+        registro = {
+            "fecha_hora": fecha_hora,
+            "variable": variable.upper(),
+            "valor": valor["v"]
+        }
+        registros.append(registro)
 
-        for variable, valor in iaqi.items():
-            registros.append({
-                "fecha_hora": dt_redondeada.isoformat(),
-                "variable": variable.upper(),
-                "valor": valor["v"]
-            })
+    # Imprimir registros
+    print("Registros a insertar o actualizar:")
+    for r in registros:
+        print(r)
 
-        for registro in registros:
-            supabase.table("calidad-aire").upsert(
-                registro,
-                on_conflict=["fecha_hora", "variable"]
-            ).execute()
+    # Upsert
+    for registro in registros:
+        supabase.table("calidad-aire").upsert(
+            registro,
+            on_conflict=["fecha_hora", "variable"]
+        ).execute()
 
-        print(f"{len(registros)} registros insertados/reemplazados para {dt_redondeada.isoformat()}.")
+    print(f"{len(registros)} registros procesados para {fecha_hora}.")
 
 else:
     print("Error al obtener datos de AQICN:", data)
