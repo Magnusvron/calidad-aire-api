@@ -32,6 +32,9 @@ jobs:
     
         echo "Probando CURL con endpoint válido:"
         curl -i https://ugszwjxitzbokzcnyhhe.supabase.co/rest/v1/ || echo "Curl fallido"
+        
+        echo "Probando CURL :"
+        curl -i https://ugszwjxitbzokzcnyhhe.supabase.co || echo "Curl fallido"
 
 
 
