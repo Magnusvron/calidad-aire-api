@@ -1,31 +1,27 @@
 import os
-from dotenv import load_dotenv
-import requests
 
-load_dotenv()
-
-# Leer variables de entorno
+# Leer variables del entorno
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 AQICN_TOKEN = os.getenv("AQICN_TOKEN")
-STATION_ID = os.getenv("AQICN_STATION")
+AQICN_STATION = os.getenv("AQICN_STATION")
 
-# Imprimir variables para depuración
-print("SUPABASE_URL:", SUPABASE_URL)
-print("SUPABASE_KEY:", SUPABASE_KEY[:6] + "..." if SUPABASE_KEY else "None")  # Mostrar solo inicio
-print("AQICN_TOKEN:", AQICN_TOKEN[:6] + "..." if AQICN_TOKEN else "None")
-print("AQICN_STATION:", STATION_ID)
+# Imprimir valores crudos para depurar
+print("=== VARIABLES DE ENTORNO LEÍDAS ===")
+print("SUPABASE_URL:", repr(SUPABASE_URL))
+print("SUPABASE_KEY:", repr(SUPABASE_KEY))
+print("AQICN_TOKEN:", repr(AQICN_TOKEN))
+print("AQICN_STATION:", repr(AQICN_STATION))
 
-# Construir URL de consulta a AQICN
-API_URL = f"https://api.waqi.info/feed/{STATION_ID}/?token={AQICN_TOKEN}"
-print("URL construida para AQICN:", API_URL)
+# Construir URL completa
+api_url = f"https://api.waqi.info/feed/{AQICN_STATION}/?token={AQICN_TOKEN}"
+print("\nURL construida para AQICN:", api_url)
 
-# Realizar la petición y mostrar resultado
+# Probar acceso a la API
+import requests
 try:
-    response = requests.get(API_URL)
-    data = response.json()
-    print("Respuesta JSON de AQICN:")
-    print(data)
+    response = requests.get(api_url)
+    print("\nRespuesta JSON de AQICN:")
+    print(response.json())
 except Exception as e:
-    print("Error al hacer la petición:")
-    print(e)
+    print("❌ Error al intentar conectarse a la API:", e)
