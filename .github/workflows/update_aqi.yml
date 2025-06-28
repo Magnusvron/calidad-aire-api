@@ -22,9 +22,8 @@ jobs:
       run: pip install -r requirements.txt
       
     - name: Mostrar valor de SUPABASE_URL
-      run: echo "SUPABASE_URL=${SUPABASE_URL}"
-      env:
-        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      run: echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}"
+
 
 
     - name: Probar conectividad con Supabase
