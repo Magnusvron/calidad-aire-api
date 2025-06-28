@@ -21,10 +21,16 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 def root():
     return {"message": "API calidad aire"}
 
+from fastapi.responses import JSONResponse
+
 @app.get("/api/datos")
 def get_datos(variable: str, desde: str, hasta: str):
-    data = supabase.table("calidad_aire").select("*")\
-        .eq("variable", variable)\
-        .gte("fecha_hora", desde)\
-        .lte("fecha_hora", hasta).execute()
-    return data.data
+    try:
+        supabase = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
+        data = supabase.table("calidad_aire").select("*")\
+            .eq("variable", variable)\
+            .gte("fecha_hora", desde)\
+            .lte("fecha_hora", hasta).execute()
+        return data.data
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
