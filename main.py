@@ -27,7 +27,7 @@ from fastapi.responses import JSONResponse
 def get_datos(variable: str, desde: str, hasta: str):
     try:
         supabase = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
-        data = supabase.table("calidad_aire").select("*")\
+        data = supabase.table("calidad-aire").select("*")\
             .eq("variable", variable)\
             .gte("fecha_hora", desde)\
             .lte("fecha_hora", hasta).execute()
