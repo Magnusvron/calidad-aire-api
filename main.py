@@ -1,11 +1,17 @@
 from fastapi import FastAPI
 from scraper import upsert_datos
 from supabase import create_client
-import os
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 app = FastAPI()
+
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
