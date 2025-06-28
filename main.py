@@ -34,3 +34,13 @@ def get_datos(variable: str, desde: str, hasta: str):
         return data.data
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
+
+@app.get("/api/debug")
+def debug():
+    try:
+        supabase = create_client(os.getenv("SUPABASE_URL"), os.getenv("SUPABASE_KEY"))
+        data = supabase.table("calidad-aire").select("*").limit(5).execute()
+        return data.data
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
