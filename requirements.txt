@@ -1,7 +1,8 @@
+pytz
 fastapi
 uvicorn
 supabase
 httpx
 python-dotenv
 requests
-pytz
+
