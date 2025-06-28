@@ -3,11 +3,10 @@ from datetime import datetime, timezone
 from supabase import create_client
 import os
 
-# Configuración desde variables de entorno
-SUPABASE_URL = os.getenv('SUPABASE_URL').strip()
-SUPABASE_KEY = os.getenv('SUPABASE_KEY').strip()
-AQICN_TOKEN = os.getenv('AQICN_TOKEN').strip()
-STATION_ID = os.getenv('STATION_ID', 'A499747').strip()  # Valor por defecto
+SUPABASE_URL="https://ugszwjxitbzokzcnyhhe.supabase.co"
+SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnc3p3anhpdGJ6b2t6Y255aGhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEwNzA5NjgsImV4cCI6MjA2NjY0Njk2OH0.wtW6Vy3n5vGJojKwcl3aXOqKW0DIcXzlYaNGc0H_hQo"
+AQICN_TOKEN="866a9b35170c510c9c82eeb3f158476e17a4c214"
+AQICN_STATION="A469795"
 
 # Validación de config
 if not all([SUPABASE_URL, SUPABASE_KEY, AQICN_TOKEN]):
