@@ -29,4 +29,4 @@ jobs:
         SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         AQICN_TOKEN: ${{ secrets.AQICN_TOKEN }}
         STATION_ID: ${{ secrets.STATION_ID }}
-      run: python main.py
+      run: python cron_job.py
