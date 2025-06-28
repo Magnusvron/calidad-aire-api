@@ -16,6 +16,8 @@ STATION_ID = os.getenv("AQICN_STATION")  # Ej: "A469795"
 # Validación
 if not all([SUPABASE_URL, SUPABASE_KEY, AQICN_TOKEN, STATION_ID]):
     raise EnvironmentError("Faltan variables de entorno necesarias")
+    
+print(f"Conectando a SUPABASE_URL: {SUPABASE_URL}")
 
 # Inicializar cliente Supabase
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
