@@ -21,6 +21,10 @@ jobs:
     - name: Instalar dependencias
       run: pip install -r requirements.txt
 
+    - name: Probar conectividad con Supabase
+      run: curl -i ${{ secrets.SUPABASE_URL }}
+
+
     - name: Ejecutar script de actualización
       env:
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
