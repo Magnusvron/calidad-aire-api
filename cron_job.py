@@ -1,50 +1,54 @@
-import os
 import requests
-from datetime import datetime
+import os
+from datetime import datetime, timezone, timedelta
 from supabase import create_client
 from dotenv import load_dotenv
 
-# Cargar variables del entorno
+# Cargar variables de entorno
 load_dotenv()
 
-# Leer credenciales y parámetros de entorno
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+AQICN_TOKEN = os.getenv("AQICN_TOKEN")
+STATION_ID = os.getenv("AQICN_STATION")  # ejemplo: A469795
 
-
-# Verificaciones básicas
-if not all([SUPABASE_URL, SUPABASE_KEY]):
-    raise ValueError("⚠️ Faltan variables de entorno. Revisa tu archivo .env o secretos de GitHub.")
-
-# Crear cliente de Supabase
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# Construir URL de la API de AQICN
+# Construir URL de API
+API_URL = f"https://api.waqi.info/feed/{STATION_ID}/?token={AQICN_TOKEN}"
 
-API_URL = "https://api.waqi.info/feed/A469795/?token=866a9b35170c510c9c82eeb3f158476e17a4c214"
+# Obtener datos
 response = requests.get(API_URL)
 data = response.json()
 
-# Procesar respuesta
 if data["status"] == "ok":
     registros = []
-    fecha_hora = data["data"]["time"]["iso"]
-    iaqi = data["data"].get("iaqi", {})
 
-    for variable, valor in iaqi.items():
-        registros.append({
-            "fecha_hora": fecha_hora,
-            "variable": variable.upper(),
-            "valor": valor.get("v")
-        })
+    # Extraer y redondear hora
+    fecha_original = data["data"]["time"]["iso"]
+    dt = datetime.fromisoformat(fecha_original.replace("Z", "+00:00")).astimezone(timezone.utc)
+    dt_redondeada = dt.replace(minute=0, second=0, microsecond=0)  # Redondear hacia abajo a hora cerrada
 
-    for registro in registros:
-        supabase.table("calidad-aire").upsert(
-            registro,
-            on_conflict=["fecha_hora", "variable"]
-        ).execute()
+    # Verificar si corresponde a hoy o futuro
+    if dt_redondeada.date() < datetime.now(timezone.utc).date():
+        print("Dato muy antiguo, ignorado:", dt_redondeada.isoformat())
+    else:
+        iaqi = data["data"]["iaqi"]
 
-    print(f"✅ {len(registros)} registros procesados para {fecha_hora} en estación {STATION_ID}.")
+        for variable, valor in iaqi.items():
+            registros.append({
+                "fecha_hora": dt_redondeada.isoformat(),
+                "variable": variable.upper(),
+                "valor": valor["v"]
+            })
+
+        for registro in registros:
+            supabase.table("calidad-aire").upsert(
+                registro,
+                on_conflict=["fecha_hora", "variable"]
+            ).execute()
+
+        print(f"{len(registros)} registros insertados/reemplazados para {dt_redondeada.isoformat()}.")
+
 else:
-    print("❌ Error al obtener datos de AQICN:", data)
-    exit(1)
+    print("Error al obtener datos de AQICN:", data)
