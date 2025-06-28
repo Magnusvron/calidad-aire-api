@@ -17,7 +17,7 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def obtener_datos_contaminacion():
     """Obtiene datos de la API AQICN y los formatea"""
-    API_URL = f"https://api.waqi.info/feed/{STATION_ID}/?token={AQICN_TOKEN}"
+    API_URL = f"https://api.waqi.info/feed/{AQICN_STATION}/?token={AQICN_TOKEN}"
     response = requests.get(API_URL)
     data = response.json()
     
