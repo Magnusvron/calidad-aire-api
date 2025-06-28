@@ -5,6 +5,11 @@ SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 AQICN_TOKEN = os.getenv("AQICN_TOKEN")
 AQICN_STATION = os.getenv("AQICN_STATION")
+# Limpieza de variables
+SUPABASE_URL = SUPABASE_URL.strip()
+SUPABASE_KEY = SUPABASE_KEY.strip()
+AQICN_TOKEN = AQICN_TOKEN.strip()
+AQICN_STATION = AQICN_STATION.strip()
 
 # Imprimir valores crudos para depurar
 print("=== VARIABLES DE ENTORNO LEÍDAS ===")
