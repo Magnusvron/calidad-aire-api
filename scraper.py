@@ -40,4 +40,4 @@ def fetch_aqicn_data():
 def upsert_datos():
     datos = fetch_aqicn_data()
     for d in datos:
-        supabase.table("calidad_aire").upsert(d).execute()
+        supabase.table("calidad-aire").upsert(d).execute()
