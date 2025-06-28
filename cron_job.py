@@ -38,3 +38,7 @@ if data["status"] == "ok":
     print("Datos insertados correctamente.")
 else:
     print("Error al obtener datos de AQICN:", data)
+    print(data)  # para ver el mensaje completo de error
+    
+print(f"{len(registros)} registros procesados para {fecha_hora}.")
+
