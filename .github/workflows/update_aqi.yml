@@ -26,7 +26,13 @@ jobs:
       run: pip show requests || echo "requests no instalado"
       
     - name: Verificar conectividad Supabase
-      run: curl -I https://ugszwjxitzbokzcnyhhe.supabase.co
+      run: |
+        echo "Probando DNS con ping:"
+        ping -c 3 ugszwjxitzbokzcnyhhe.supabase.co || echo "Ping fallido"
+    
+        echo "Probando CURL con endpoint válido:"
+        curl -i https://ugszwjxitzbokzcnyhhe.supabase.co/rest/v1/ || echo "Curl fallido"
+
 
 
     - name: Ejecutar el cron job
