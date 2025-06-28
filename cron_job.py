@@ -10,18 +10,18 @@ load_dotenv()
 # Leer credenciales y parámetros de entorno
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-AQICN_TOKEN = os.getenv("AQICN_TOKEN")
-STATION_ID = os.getenv("AQICN_STATION") or "A469795"  # Fallback por si no está definido
+
 
 # Verificaciones básicas
-if not all([SUPABASE_URL, SUPABASE_KEY, AQICN_TOKEN, STATION_ID]):
+if not all([SUPABASE_URL, SUPABASE_KEY]):
     raise ValueError("⚠️ Faltan variables de entorno. Revisa tu archivo .env o secretos de GitHub.")
 
 # Crear cliente de Supabase
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # Construir URL de la API de AQICN
-API_URL = f"https://api.waqi.info/feed/{STATION_ID}/?token={AQICN_TOKEN}"
+
+API_URL = https://api.waqi.info/feed/A469795/?token=866a9b35170c510c9c82eeb3f158476e17a4c214
 response = requests.get(API_URL)
 data = response.json()
 
