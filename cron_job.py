@@ -21,7 +21,7 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # Construir URL de la API de AQICN
 
-API_URL = https://api.waqi.info/feed/A469795/?token=866a9b35170c510c9c82eeb3f158476e17a4c214
+API_URL = "https://api.waqi.info/feed/A469795/?token=866a9b35170c510c9c82eeb3f158476e17a4c214"
 response = requests.get(API_URL)
 data = response.json()
 
