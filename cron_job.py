@@ -4,10 +4,10 @@ from supabase import create_client
 import os
 
 # Configuración desde variables de entorno
-SUPABASE_URL = os.getenv('SUPABASE_URL')
-SUPABASE_KEY = os.getenv('SUPABASE_KEY')
-AQICN_TOKEN = os.getenv('AQICN_TOKEN')
-STATION_ID = os.getenv('STATION_ID', 'A499747')  # Valor por defecto
+SUPABASE_URL = os.getenv('SUPABASE_URL').strip()
+SUPABASE_KEY = os.getenv('SUPABASE_KEY').strip()
+AQICN_TOKEN = os.getenv('AQICN_TOKEN').strip()
+STATION_ID = os.getenv('STATION_ID', 'A499747').strip()  # Valor por defecto
 
 # Validación de config
 if not all([SUPABASE_URL, SUPABASE_KEY, AQICN_TOKEN]):
