@@ -1,32 +1,31 @@
-# cron_job.py
-
-import requests
 import os
+import requests
 from datetime import datetime
 from supabase import create_client
 from dotenv import load_dotenv
 
-# Cargar variables de entorno
+# Cargar variables del entorno
 load_dotenv()
 
-# Obtener credenciales y parámetros desde el entorno
+# Leer credenciales y parámetros de entorno
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-AQICN_TOKEN = os.getenv("AQICN_TOKEN")  # Token válido de AQICN
-STATION_ID = os.getenv("AQICN_STATION")  # Debe ser numérico, ej. "469795"
+AQICN_TOKEN = os.getenv("AQICN_TOKEN")
+STATION_ID = os.getenv("AQICN_STATION") or "A469795"  # Fallback por si no está definido
+
+# Verificaciones básicas
+if not all([SUPABASE_URL, SUPABASE_KEY, AQICN_TOKEN, STATION_ID]):
+    raise ValueError("⚠️ Faltan variables de entorno. Revisa tu archivo .env o secretos de GitHub.")
 
 # Crear cliente de Supabase
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# Construir URL de la API (IMPORTANTE: el '@' antes del ID)
-API_URL = f"https://api.waqi.info/feed/@{STATION_ID}/?token={AQICN_TOKEN}"
-print("Consultando:", API_URL)  # Útil para debug en GitHub Actions
-
-# Obtener datos
+# Construir URL de la API de AQICN
+API_URL = f"https://api.waqi.info/feed/{STATION_ID}/?token={AQICN_TOKEN}"
 response = requests.get(API_URL)
 data = response.json()
-print("Respuesta API:", data)
 
+# Procesar respuesta
 if data["status"] == "ok":
     registros = []
     fecha_hora = data["data"]["time"]["iso"]
@@ -36,13 +35,16 @@ if data["status"] == "ok":
         registros.append({
             "fecha_hora": fecha_hora,
             "variable": variable.upper(),
-            "valor": valor["v"]
+            "valor": valor.get("v")
         })
 
-    # Insertar en Supabase (UPSERT por clave compuesta)
     for registro in registros:
-        supabase.table("calidad-aire").upsert(registro, on_conflict=["fecha_hora", "variable"]).execute()
+        supabase.table("calidad-aire").upsert(
+            registro,
+            on_conflict=["fecha_hora", "variable"]
+        ).execute()
 
-    print(f"{len(registros)} registros procesados para {fecha_hora}.")
+    print(f"✅ {len(registros)} registros procesados para {fecha_hora} en estación {STATION_ID}.")
 else:
     print("❌ Error al obtener datos de AQICN:", data)
+    exit(1)
