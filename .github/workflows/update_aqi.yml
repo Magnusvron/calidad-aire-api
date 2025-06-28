@@ -1,16 +1,16 @@
-name: Actualizar Base de Datos
+name: update-database
 
 on:
   schedule:
-    - cron: '0 * * * *'  # cada hora
-  workflow_dispatch:     # permite correrlo manualmente desde GitHub
+    - cron: '0 * * * *'  # Ejecuta cada hora
+  workflow_dispatch:  # También puede ejecutarse manualmente
 
 jobs:
-  update-db:
+  update:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Clonar el repositorio
+    - name: Clonar repositorio
       uses: actions/checkout@v3
 
     - name: Configurar Python
@@ -20,20 +20,18 @@ jobs:
 
     - name: Instalar dependencias
       run: pip install -r requirements.txt
-      
-    - name: Mostrar valor de SUPABASE_URL
-      run: echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}"
 
+    - name: Mostrar valores explícitos
+      run: |
+        echo "SUPABASE_URL=https://ugszwjxitbzokzcnyhhe.supabase.co"
+        echo "SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnc3p3anhpdGJ6b2t6Y255aGhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEwNzA5NjgsImV4cCI6MjA2NjY0Njk2OH0.wtW6Vy3n5vGJojKwcl3aXOqKW0DIcXzlYaNGc0H_hQo"
+        echo "AQICN_TOKEN=866a9b35170c510c9c82eeb3f158476e17a4c214"
+        echo "AQICN_STATION=A469795"
 
-
-    - name: Probar conectividad con Supabase
-      run: curl -i ${{ secrets.SUPABASE_URL }}
-
-
-    - name: Ejecutar script de actualización
-      env:
-        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-        AQICN_TOKEN: ${{ secrets.AQICN_TOKEN }}
-        AQICN_STATION: ${{ secrets.AQICN_STATION }}
-      run: python cron_job.py
+    - name: Ejecutar cron_job.py con variables explícitas
+      run: |
+        export SUPABASE_URL="https://ugszwjxitbzokzcnyhhe.supabase.co"
+        export SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnc3p3anhpdGJ6b2t6Y255aGhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEwNzA5NjgsImV4cCI6MjA2NjY0Njk2OH0.wtW6Vy3n5vGJojKwcl3aXOqKW0DIcXzlYaNGc0H_hQo"
+        export AQICN_TOKEN="866a9b35170c510c9c82eeb3f158476e17a4c214"
+        export AQICN_STATION="A469795"
+        python cron_job.py
