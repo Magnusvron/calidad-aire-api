@@ -1,37 +1,32 @@
-name: update-database
+name: Actualización Horaria de Calidad del Aire
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Ejecuta cada hora
-  workflow_dispatch:  # También puede ejecutarse manualmente
+    - cron: '0 * * * *'  # Cada hora en el minuto 0
+  workflow_dispatch:  # Permite ejecución manual
 
 jobs:
   update:
     runs-on: ubuntu-latest
-
+    
     steps:
-    - name: Clonar repositorio
+    - name: Checkout código
       uses: actions/checkout@v3
-
+    
     - name: Configurar Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-
+    
     - name: Instalar dependencias
-      run: pip install -r requirements.txt
-
-    - name: Mostrar valores explícitos
       run: |
-        echo "SUPABASE_URL=https://ugszwjxitbzokzcnyhhe.supabase.co"
-        echo "SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnc3p3anhpdGJ6b2t6Y255aGhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEwNzA5NjgsImV4cCI6MjA2NjY0Njk2OH0.wtW6Vy3n5vGJojKwcl3aXOqKW0DIcXzlYaNGc0H_hQo"
-        echo "AQICN_TOKEN=866a9b35170c510c9c82eeb3f158476e17a4c214"
-        echo "AQICN_STATION=A469795"
-
-    - name: Ejecutar cron_job.py con variables explícitas
-      run: |
-        export SUPABASE_URL="https://ugszwjxitbzokzcnyhhe.supabase.co"
-        export SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnc3p3anhpdGJ6b2t6Y255aGhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTEwNzA5NjgsImV4cCI6MjA2NjY0Njk2OH0.wtW6Vy3n5vGJojKwcl3aXOqKW0DIcXzlYaNGc0H_hQo"
-        export AQICN_TOKEN="866a9b35170c510c9c82eeb3f158476e17a4c214"
-        export AQICN_STATION="A469795"
-        python cron_job.py
+        python -m pip install --upgrade pip
+        pip install supabase requests python-dotenv
+    
+    - name: Ejecutar script
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        AQICN_TOKEN: ${{ secrets.AQICN_TOKEN }}
+        STATION_ID: ${{ secrets.STATION_ID }}
+      run: python main.py
