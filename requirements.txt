@@ -9,3 +9,4 @@ pytz==2023.3.post1
 tensorflow==2.15.0  # Incluye Keras por defecto
 numpy==1.26.3  # Requerido por TensorFlow
 pydantic==2.6.1  # Para validación de datos (usado en FastAPI)
+joblib==1.3.2
