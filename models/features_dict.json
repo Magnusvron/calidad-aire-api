@@ -1,0 +1,103 @@
+{
+  "co": [
+    "o3",
+    "so2",
+    "pm25",
+    "tmp",
+    "pb",
+    "hr",
+    "no2",
+    "o3_lag1",
+    "o3_lag24",
+    "tmp_lag24",
+    "hr_lag1",
+    "hr_lag24"
+  ],
+  "o3": [
+    "co",
+    "so2",
+    "pm25",
+    "tmp",
+    "pb",
+    "hr",
+    "no2",
+    "pm25_lag6",
+    "tmp_lag24",
+    "pb_lag24",
+    "hr_lag24"
+  ],
+  "so2": [
+    "co",
+    "o3",
+    "pm25",
+    "tmp",
+    "pb",
+    "hr",
+    "no2",
+    "co_lag1",
+    "pm25_lag6",
+    "tmp_lag24"
+  ],
+  "pm25": [
+    "co",
+    "o3",
+    "so2",
+    "tmp",
+    "pb",
+    "hr",
+    "no2",
+    "co_lag24",
+    "o3_lag24",
+    "so2_lag24",
+    "hr_lag1"
+  ],
+  "tmp": [
+    "co",
+    "o3",
+    "so2",
+    "pm25",
+    "pb",
+    "hr",
+    "no2",
+    "tmp_lag1",
+    "tmp_lag24",
+    "pb_lag24"
+  ],
+  "pb": [
+    "co",
+    "o3",
+    "so2",
+    "pm25",
+    "tmp",
+    "hr",
+    "no2",
+    "pb_lag1",
+    "pb_lag24",
+    "pb_lag72",
+    "tmp_lag24"
+  ],
+  "hr": [
+    "co",
+    "o3",
+    "so2",
+    "pm25",
+    "tmp",
+    "pb",
+    "no2",
+    "hr_lag1",
+    "hr_lag24",
+    "tmp_lag24"
+  ],
+  "no2": [
+    "co",
+    "o3",
+    "so2",
+    "pm25",
+    "tmp",
+    "pb",
+    "hr",
+    "no2_lag1",
+    "no2_lag24",
+    "no2_lag168"
+  ]
+}
