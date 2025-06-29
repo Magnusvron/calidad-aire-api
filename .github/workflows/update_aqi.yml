@@ -2,7 +2,8 @@ name: Actualización Horaria de Calidad del Aire
 
 on:
   schedule:
-    - cron: '*/30 * * * *' # Cada hora en el minuto 0
+    - cron: '0 * * * *'   # xx:00 UTC
+    - cron: '30 * * * *'  # xx:30 UTC
   workflow_dispatch:  # Permite ejecución manual
 
 jobs:
