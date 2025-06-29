@@ -1,8 +1,11 @@
-pytz
-fastapi
-uvicorn
-supabase
-httpx
-python-dotenv
-requests
+fastapi==0.109.1
+uvicorn==0.27.0
+supabase==2.7.1
+httpx==0.26.0
+python-dotenv==1.0.0
+requests==2.31.0
+pytz==2023.3.post1
 
+tensorflow==2.15.0  # Incluye Keras por defecto
+numpy==1.26.3  # Requerido por TensorFlow
+pydantic==2.6.1  # Para validación de datos (usado en FastAPI)
