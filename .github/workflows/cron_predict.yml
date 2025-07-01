@@ -2,7 +2,7 @@ name: Ejecutar predicción cada hora
 
 on:
   schedule:
-    - cron:  '0 * * * *'     # cada hora, hora UTC
+    #- cron:  '0 * * * *'     # cada hora, hora UTC
   workflow_dispatch:         # permite ejecutarlo manualmente desde GitHub
 
 jobs:
@@ -26,4 +26,4 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-        run: python cron_predict.py
+       # run: python cron_predict.py
